@@ -46,11 +46,17 @@ class Database:
         return self.fetchall()
 
     def create_table(self):
+        """
+        This method creates table in database and makes some indexes
+        """
         self.query("""CREATE TABLE IF NOT EXISTS data(data_id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT,
         lat_word TEXT,rus_word TEXT, int_num INT UNSIGNED, float_num DECIMAL(10,8));""")
         self.query("""CREATE INDEX IF NOT EXISTS int_float_nums_idx ON data(int_num, float_num);""")
 
     def insert_data(self):
+        """
+        This method fill database's table with data
+        """
         with open(RESULT_FILE_PATH) as f:
             lines = f.readlines()
             for line, i in zip(lines, tqdm.tqdm(range(len(lines)))):
@@ -58,10 +64,27 @@ class Database:
                 self.query("""INSERT INTO data (date, lat_word, rus_word, int_num, float_num) VALUES(?,?,?,?,?);""",
                            sep_line)
 
-    def select_sum_avg(self):
-        return self.query("SELECT SUM(int_num), AVG(float_num) FROM data")[0]
+    def select_sum(self):
+        """
+        This method counts sum of integers
+        """
+        return self.query("SELECT SUM(int_num) FROM data")[0]
+
+    def select_med(self):
+        """
+        This function counts median of float numbers
+        """
+        t = self.query("SELECT float_num FROM data")
+        if len(t) % 2 == 0:
+            t.sort()
+            med = (t[len(t) // 2][0] + t[len(t) // 2 - 1][0]) / 2
+            return med
+        else:
+            t.sort()
+            return t[len(t) // 2][0]
 
     def drop_table(self):
+        """
+        This method deletes table from database
+        """
         self.query("""DROP TABLE data""")
-
-

@@ -5,6 +5,9 @@ from path import FILES_DIR_PATH, RESULT_FILE_PATH
 
 
 def file_con():
+    """
+    This function concatenates single txt files into one file
+    """
     filenames = glob.glob(str(Path(FILES_DIR_PATH, "*.txt")))
     with open(RESULT_FILE_PATH, "w") as outfile:
         for f_name in filenames:
@@ -18,6 +21,9 @@ def read_file(filename):
 
 
 def delete_lines(letters):
+    """
+    This function deletes any combination of signs from txt files
+    """
     with open(RESULT_FILE_PATH, 'r+') as outfile:
         lines = outfile.readlines()
         outfile.seek(0)

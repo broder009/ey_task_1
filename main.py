@@ -16,7 +16,8 @@ if __name__ == '__main__':
             with Database("new_database.db") as db:
                 db.create_table()
                 db.insert_data()
-                print(db.select_sum_avg())
+                print("sum: " + str(db.select_sum()[0]), "med: " + str(db.select_med()))
+
                 db.drop_table()
             chose = input("Input your variant, if you wont to exit, input 0: ")
         if chose == "0":
